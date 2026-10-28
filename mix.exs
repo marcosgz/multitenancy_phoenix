@@ -39,7 +39,8 @@ defmodule Multitenancy.MixProject do
       {:jason, "~> 1.4"},
       {:gettext, "~> 1.0", optional: true},
       {:tailwind, "~> 0.3", optional: true},
-      {:esbuild, "~> 0.9", optional: true}
+      {:esbuild, "~> 0.9", optional: true},
+      {:ex_doc, "~> 0.38", only: :dev, runtime: false}
     ]
   end
 end
