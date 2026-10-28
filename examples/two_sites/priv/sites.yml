@@ -1,0 +1,9 @@
+alpha:
+  theme: alpha
+  hosts: [alpha.localtest.me]
+  settings:
+    title: Alpha Daily
+
+beta:
+  theme: beta
+  hosts: [beta.localtest.me]

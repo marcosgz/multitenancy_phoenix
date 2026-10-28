@@ -1,0 +1,7 @@
+<%= if @base_css? do %>@import "../../../../assets/css/app.css";
+<% else %>@import "tailwindcss" source(none);
+<% end %>@source "../../lib";
+
+@theme {
+  --color-brand: oklch(55% 0.2 260);
+}

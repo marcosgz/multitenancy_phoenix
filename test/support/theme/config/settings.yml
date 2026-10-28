@@ -1,0 +1,4 @@
+title: Fixture
+nested:
+  color: red
+  size: 10

@@ -1,0 +1,6 @@
+<Layouts.app flash={@flash} current_site={assigns[:current_site]}>
+  <h1 id="greeting" class="text-3xl font-bold">Base home template</h1>
+  <p :if={assigns[:current_site]} id="served-by">
+    Rendered by the {@current_site.theme.name} theme
+  </p>
+</Layouts.app>

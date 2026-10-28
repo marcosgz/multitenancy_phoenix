@@ -1,0 +1,6 @@
+@import "../../../../assets/css/app.css";
+@source "../../lib";
+
+@theme {
+  --color-brand: oklch(62% 0.17 150);
+}

@@ -1,0 +1,5 @@
+<Layouts.app flash={@flash} current_site={@current_site}>
+  <h1 id="greeting" class="text-4xl font-black text-brand">Alpha home override</h1>
+  <p>{@current_site.settings["tagline"]}</p>
+  <.link navigate={~p"/counter"} class="btn btn-primary">Counter</.link>
+</Layouts.app>
