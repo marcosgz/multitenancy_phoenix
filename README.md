@@ -160,8 +160,9 @@ It reads the tailwind and esbuild versions from your config. It also reuses the 
 
 ## Example
 
-`examples/two_sites` is a Phoenix 1.8 app serving `alpha.localtest.me` and
-`beta.localtest.me` from two themes, with `localhost` as the platform host.
+[`examples/two_sites`](examples/two_sites/README.md) is a Phoenix 1.8 app serving
+`alpha.localtest.me` and `beta.localtest.me` from two themes, with `localhost` as the
+platform host.
 
 ```
 cd examples/two_sites
