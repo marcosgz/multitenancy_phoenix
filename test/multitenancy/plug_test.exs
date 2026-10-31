@@ -5,14 +5,18 @@ defmodule Multitenancy.PlugTest do
 
   alias Multitenancy.Plug.{Dispatch, ResolveSite}
 
-  defp request(host, path \\ "/") do
+  @resolve_opts [resolver: Fixture.StaticResolver, platform_hosts: ["platform.test"], platform_paths: ["/admin"]]
+
+  defp request(host, path \\ "/", opts \\ @resolve_opts) do
     conn(:get, path)
     |> Map.put(:host, host)
-    |> ResolveSite.call(ResolveSite.init(resolver: Fixture.StaticResolver, platform_hosts: ["platform.test"]))
+    |> ResolveSite.call(ResolveSite.init(opts))
   end
 
   defp dispatch(conn) do
-    if conn.halted, do: conn, else: Dispatch.call(conn, Dispatch.init(platform: Fixture.PlatformRouter))
+    if conn.halted,
+      do: conn,
+      else: Dispatch.call(conn, Dispatch.init(platform: Fixture.PlatformRouter, platform_paths: ["/admin"]))
   end
 
   test "assigns the resolved site and theme" do
@@ -54,5 +58,33 @@ defmodule Multitenancy.PlugTest do
   test "theme routes are not visible to the platform" do
     assert_raise Phoenix.Router.NoRouteError, fn -> "platform.test" |> request("/theme-only") |> dispatch() end
     assert "fixture.test" |> request("/theme-only") |> dispatch() |> Map.get(:status) == 200
+  end
+
+  test "serves platform paths on unknown hosts" do
+    conn = "unknown.test" |> request("/admin/status") |> dispatch()
+
+    assert conn.status == 200
+    assert conn.private.phoenix_router == Fixture.PlatformRouter
+  end
+
+  test "routes platform paths of a site to the platform router, keeping the site" do
+    conn = "fixture.test" |> request("/admin/status") |> dispatch()
+
+    assert conn.private.phoenix_router == Fixture.PlatformRouter
+    assert conn.assigns.current_site.slug == "fixture"
+  end
+
+  test "platform paths match whole segments" do
+    assert "unknown.test" |> request("/administrator") |> Map.get(:status) == 404
+  end
+
+  test "uses resolve_conn/1 when the resolver defines it" do
+    conn =
+      conn(:get, "/")
+      |> Map.put(:host, "unknown.test")
+      |> Plug.Conn.put_req_header("x-site", "fixture")
+      |> ResolveSite.call(ResolveSite.init(resolver: Fixture.HeaderResolver, platform_hosts: []))
+
+    assert conn.assigns.current_site.slug == "fixture"
   end
 end

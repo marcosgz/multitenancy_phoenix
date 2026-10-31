@@ -1,4 +1,6 @@
 defmodule <%= @module %> do
+  @moduledoc "The <%= @name %> theme: entrypoint for its controllers, HTML modules, LiveViews and router."
+
   use Multitenancy.Theme, name: "<%= @name %>"
 
   def router do

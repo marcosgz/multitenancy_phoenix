@@ -46,7 +46,8 @@ to `assets.deploy`, before `phx.digest`.
 # config/config.exs
 config :multitenancy_phoenix,
   resolver: Multitenancy.SiteResolver.YAML, # default
-  platform_hosts: ["localhost"]              # hosts served by MyAppWeb.Router
+  platform_hosts: ["localhost"],             # hosts served by MyAppWeb.Router
+  platform_paths: ["/admin", "/health"]      # served by MyAppWeb.Router on every host
 
 # lib/my_app/application.ex
 children = [
@@ -92,11 +93,22 @@ defmodule MyApp.SiteResolver do
   def resolve(host) do
     case MyApp.Sites.get_by_host(host) do
       nil -> :error
-      site -> {:ok, %Multitenancy.Site{slug: site.slug, theme: Multitenancy.theme!(site.theme_name), hosts: [host]}}
+      site -> {:ok, %Multitenancy.Site{slug: site.slug, theme: Multitenancy.theme!(site.theme_name), hosts: [host], data: site}}
     end
   end
 end
 ```
+
+`:data` carries any application value along with the site, such as the database record.
+Define the optional `resolve_conn/1` callback when the lookup needs more than the host,
+for example a header that picks the site in local testing. `ResolveSite` then calls it
+instead of `resolve/1`.
+
+### Platform paths
+
+Paths listed in `:platform_paths` are routed to the platform router on every host, with the
+site still assigned when the host resolves to one. Unknown hosts get a 404 everywhere else.
+Use it for an admin area or health checks shared by all sites.
 
 ## Themes
 
@@ -157,6 +169,8 @@ whenever the theme defines it.
 
 It reads the tailwind and esbuild versions from your config. It also reuses the esbuild
 `:env` (for example `NODE_PATH`) of your app's main esbuild profile.
+Extra esbuild arguments for every theme bundle (aliases, `--splitting --format=esm`, loaders)
+go in `config :multitenancy_phoenix, esbuild_args: [...]`.
 
 ## Example
 

@@ -60,6 +60,20 @@ defmodule Multitenancy do
   def platform_hosts do
     Application.get_env(:multitenancy_phoenix, :platform_hosts, [])
   end
+
+  @doc """
+  Path prefixes served by the platform router on every host, such as an admin
+  area or health checks shared by all sites.
+  """
+  def platform_paths do
+    Application.get_env(:multitenancy_phoenix, :platform_paths, [])
+  end
+
+  @doc "Whether `path_info` falls under one of the `prefixes` (`\"/admin\"` matches `/admin/sites`)."
+  @spec platform_path?([String.t()], [String.t()]) :: boolean
+  def platform_path?(path_info, prefixes) do
+    Enum.any?(prefixes, &List.starts_with?(path_info, String.split(&1, "/", trim: true)))
+  end
 end
 
 defmodule Multitenancy.ThemeNotFoundError do

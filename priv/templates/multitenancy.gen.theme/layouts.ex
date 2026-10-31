@@ -1,4 +1,6 @@
 defmodule <%= @module %>.Layouts do
+  @moduledoc "Layouts of the <%= @name %> theme."
+
   use <%= @module %>, :html
 
   embed_templates "layouts/*"
