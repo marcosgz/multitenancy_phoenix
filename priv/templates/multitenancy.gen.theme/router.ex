@@ -1,4 +1,6 @@
 defmodule <%= @module %>.Router do
+  @moduledoc "Routes of the <%= @name %> theme."
+
   use <%= @module %>, :router
 
   pipeline :browser do

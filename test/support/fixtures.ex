@@ -26,6 +26,7 @@ defmodule Fixture.PlatformRouter do
   use Phoenix.Router
 
   get "/", Fixture.PageController, :show
+  get "/admin/status", Fixture.PageController, :show
 end
 
 defmodule Themes.Fixture do
@@ -67,4 +68,19 @@ defmodule Fixture.StaticResolver do
   end
 
   def resolve(_host), do: :error
+end
+
+defmodule Fixture.HeaderResolver do
+  @behaviour Multitenancy.SiteResolver
+
+  @impl true
+  def resolve(host), do: Fixture.StaticResolver.resolve(host)
+
+  @impl true
+  def resolve_conn(conn) do
+    case Plug.Conn.get_req_header(conn, "x-site") do
+      ["fixture"] -> Fixture.StaticResolver.resolve("fixture.test")
+      _ -> resolve(conn.host)
+    end
+  end
 end

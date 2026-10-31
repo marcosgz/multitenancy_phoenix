@@ -1,4 +1,6 @@
 defmodule <%= @module %>.CounterLive do
+  @moduledoc "Sample LiveView of the <%= @name %> theme."
+
   use <%= @module %>, :live_view
 
   def mount(_params, _session, socket) do

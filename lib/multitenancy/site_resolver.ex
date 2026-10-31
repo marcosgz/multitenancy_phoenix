@@ -9,4 +9,13 @@ defmodule Multitenancy.SiteResolver do
   """
 
   @callback resolve(host :: String.t()) :: {:ok, Multitenancy.Site.t()} | :error
+
+  @doc """
+  Resolves a site from the whole request, for lookups that need more than the
+  host (a header, a path prefix, ...). When implemented, `Multitenancy.Plug.ResolveSite`
+  calls it instead of `c:resolve/1`.
+  """
+  @callback resolve_conn(Plug.Conn.t()) :: {:ok, Multitenancy.Site.t()} | :error
+
+  @optional_callbacks resolve_conn: 1
 end

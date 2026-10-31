@@ -17,6 +17,13 @@ defmodule Mix.Tasks.Multitenancy.Assets do
       config :esbuild, version: "0.25.4", my_app: [env: %{"NODE_PATH" => ...}]
       config :tailwind, version: "4.1.12"
 
+  Extra esbuild arguments shared by every theme bundle, such as aliases to the
+  base application's modules or code splitting, go in `:esbuild_args`. Bundles
+  are written with `--outdir`, so `--splitting --format=esm` works as is:
+
+      config :multitenancy_phoenix,
+        esbuild_args: ~w(--format=esm --splitting --alias:@app=./assets/js)
+
   Use it as a development watcher in the endpoint:
 
       watchers: [themes: {Mix.Tasks.Multitenancy.Assets, :run, [~w(--watch)]}]
@@ -78,8 +85,9 @@ defmodule Mix.Tasks.Multitenancy.Assets do
       profile = String.to_atom("multitenancy_#{theme}_js")
 
       args =
-        [input, "--bundle", "--target=es2022", "--outfile=#{Path.join(output, "app.js")}"] ++
+        [input, "--bundle", "--target=es2022", "--outdir=#{output}"] ++
           ~w(--external:/fonts/* --external:/images/*) ++
+          Application.get_env(:multitenancy_phoenix, :esbuild_args, []) ++
           flag(opts[:minify], "--minify") ++ flag(opts[:watch], ["--sourcemap=inline", "--watch"])
 
       Application.put_env(:esbuild, profile, args: args, cd: File.cwd!(), env: esbuild_env())
