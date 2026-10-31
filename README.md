@@ -34,7 +34,7 @@ defp elixirc_paths(:test), do: ["lib", "test/support" | Path.wildcard("themes/*/
 defp elixirc_paths(_), do: ["lib" | Path.wildcard("themes/*/lib")]
 
 defp deps do
-  [{:multitenancy_phoenix, "~> 0.1"}, ...]
+  [{:multitenancy_phoenix, "~> 0.2"}, ...]
 end
 ```
 
