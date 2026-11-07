@@ -1,4 +1,9 @@
-# multitenancy_phoenix
+<h1 align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/marcosgz/multitenancy_phoenix/master/docs/brand/lockup-multitenancy-phoenix-on-dark.svg">
+    <img alt="Multitenancy for Phoenix" src="https://raw.githubusercontent.com/marcosgz/multitenancy_phoenix/master/docs/brand/lockup-multitenancy-phoenix-on-light.svg" width="583">
+  </picture>
+</h1>
 
 Multi-site, theme-based multitenancy for Phoenix: the Elixir counterpart of
 [multitenancy-rails](https://github.com/marcosgz/multitenancy-rails).
