@@ -1,7 +1,7 @@
 defmodule Multitenancy.MixProject do
   use Mix.Project
 
-  @version "0.2.0"
+  @version "0.3.0"
   @source_url "https://github.com/marcosgz/multitenancy_phoenix"
 
   def project do
@@ -17,9 +17,9 @@ defmodule Multitenancy.MixProject do
       package: [
         licenses: ["MIT"],
         links: %{"GitHub" => @source_url},
-        files: ~w(lib priv mix.exs README.md LICENSE.txt)
+        files: ~w(lib priv mix.exs README.md CHANGELOG.md LICENSE.txt)
       ],
-      docs: [main: "readme", extras: ["README.md"], source_ref: "v#{@version}"]
+      docs: [main: "readme", extras: ["README.md", "CHANGELOG.md"], source_ref: "v#{@version}"]
     ]
   end
 

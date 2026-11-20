@@ -16,12 +16,28 @@ defmodule Multitenancy do
     Application.get_env(:multitenancy_phoenix, :themes_path, "themes")
   end
 
-  @doc "Names of the theme directories found under `themes_path/0`."
+  @doc "Names of the theme directories found under `themes_path/0` (needs the source tree)."
   def theme_names(root \\ themes_path()) do
     root
     |> Path.join("*/lib")
     |> Path.wildcard()
     |> Enum.map(&(&1 |> Path.dirname() |> Path.basename()))
+    |> Enum.sort()
+  end
+
+  @doc """
+  Names of the themes compiled into `otp_app`, sorted. Unlike `theme_names/1`
+  it reads the loaded modules rather than the source tree, so it also works
+  in a release.
+  """
+  @spec compiled_theme_names(atom) :: [String.t()]
+  def compiled_theme_names(otp_app) do
+    otp_app
+    |> Application.spec(:modules)
+    |> List.wrap()
+    |> Enum.filter(&match?(["Themes", _], Module.split(&1)))
+    |> Enum.filter(&(Code.ensure_loaded?(&1) and function_exported?(&1, :__theme__, 0)))
+    |> Enum.map(& &1.__theme__().name)
     |> Enum.sort()
   end
 
