@@ -27,4 +27,9 @@ defmodule MultitenancyTest do
 
     assert Multitenancy.theme_names(dir) == ~w(alpha beta)
   end
+
+  test "compiled_theme_names/1 lists the theme modules compiled into an app" do
+    assert Multitenancy.compiled_theme_names(:multitenancy_phoenix) == ["fixture"]
+    assert Multitenancy.compiled_theme_names(:unknown_app) == []
+  end
 end
