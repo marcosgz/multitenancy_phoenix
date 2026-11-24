@@ -15,7 +15,7 @@ defmodule Multitenancy.MixProject do
       description: "Multi-site, theme-based multitenancy for Phoenix applications",
       source_url: @source_url,
       package: [
-        licenses: ["MIT"],
+        licenses: ["GPL-3.0-or-later"],
         links: %{"GitHub" => @source_url},
         files: ~w(lib priv mix.exs README.md CHANGELOG.md LICENSE.txt)
       ],
